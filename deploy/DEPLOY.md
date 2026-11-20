@@ -59,14 +59,10 @@ Required values (see `.env.example` for the full list):
 
 ## 4. Uploads folder
 
-```bash
-sudo mkdir -p /var/www/realenglish/uploads
-sudo chown -R $USER:$USER /var/www/realenglish/uploads
-```
-
-Copy the existing media files from your old machine into this folder
-(e.g. via WinSCP/scp from `server/uploads/`). The files are referenced by
-filename in the database, so the folder contents must match.
+The media files are **already in the repo** (`uploads/`). Since the repo is
+cloned to `/var/www/realenglish`, the files land exactly at
+`/var/www/realenglish/uploads` — which matches `UPLOADS_DIR` in `.env`.
+Nothing to do.
 
 > **Oracle note:** the boot volume is ephemeral — on a reboot the instance
 > reboots from the image and `/var/www` changes are lost. Either (a) bake the
