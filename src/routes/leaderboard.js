@@ -32,12 +32,13 @@ router.get('/rankings/:type', requireAuth, async (req, res) => {
     const pointsField = type === 'daily' ? 'dailyPoints' : 'weeklyPoints';
     const pointsColumn = Prisma.raw(`"${pointsField}"`);
     const pageSize = 20;
+    // NOTE: "user" is a reserved word in PostgreSQL — use the "usr" alias.
     const counts = await prisma.$queryRaw(Prisma.sql`
       SELECT COUNT(*) AS "totalEntries"
       FROM "LeaderboardEntry" AS entry
-      INNER JOIN "User" AS user ON user.id = entry."userId"
+      INNER JOIN "User" AS usr ON usr.id = entry."userId"
       WHERE entry."academicYear" = ${academicYear}
-        AND user.role = 'STUDENT'
+        AND usr.role = 'STUDENT'
     `);
     const totalEntries = Number(counts[0].totalEntries);
     const totalPages = Math.ceil(totalEntries / pageSize);
@@ -51,16 +52,16 @@ router.get('/rankings/:type', requireAuth, async (req, res) => {
         entry."totalPoints" AS "totalPoints",
         entry."dailyPoints" AS "dailyPoints",
         entry."weeklyPoints" AS "weeklyPoints",
-        user."firstName" AS "firstName",
-        user."lastName" AS "lastName",
-        user.username AS "username",
-        user.level AS "level",
-        user."avatarUrl" AS "avatarUrl"
+        usr."firstName" AS "firstName",
+        usr."lastName" AS "lastName",
+        usr.username AS "username",
+        usr.level AS "level",
+        usr."avatarUrl" AS "avatarUrl"
       FROM "LeaderboardEntry" AS entry
-      INNER JOIN "User" AS user ON user.id = entry."userId"
+      INNER JOIN "User" AS usr ON usr.id = entry."userId"
       WHERE entry."academicYear" = ${academicYear}
-        AND user.role = 'STUDENT'
-      ORDER BY entry.${pointsColumn} DESC, entry."totalPoints" DESC, user.id ASC
+        AND usr.role = 'STUDENT'
+      ORDER BY entry.${pointsColumn} DESC, entry."totalPoints" DESC, usr.id ASC
       LIMIT ${pageSize} OFFSET ${offset}
     `);
 
