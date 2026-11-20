@@ -79,21 +79,32 @@ npx prisma migrate deploy
 npx prisma generate
 ```
 
-## 6. Nginx + HTTPS
+## 6. Nginx + HTTPS (two steps)
+
+**Step 1 — HTTP-only config** (so `nginx -t` passes before any certificate
+exists):
 
 ```bash
-sudo cp deploy/nginx-realenglish.conf /etc/nginx/sites-available/realenglish
-sudo ln -s /etc/nginx/sites-available/realenglish /etc/nginx/sites-enabled/
+sudo cp deploy/nginx-step1-http.conf /etc/nginx/sites-available/realenglish
+sudo ln -sf /etc/nginx/sites-available/realenglish /etc/nginx/sites-enabled/
 sudo rm -f /etc/nginx/sites-enabled/default
 sudo mkdir -p /var/www/letsencrypt
 sudo nginx -t && sudo systemctl reload nginx
-
-# Issue the certificate (duckdns.org resolves to the Oracle IP, so this works)
-sudo certbot --nginx -d realenglishacademy.duckdns.org
 ```
 
-Certbot rewrites the config to add the certificate and the HTTP→HTTPS
-redirect. Renewal is automatic (systemd timer).
+**Step 2 — Let's Encrypt** (certbot adds the 443/HTTPS block + the
+HTTP→HTTPS redirect automatically, keeping the proxy settings):
+
+```bash
+sudo certbot --nginx -d realenglishacademy.duckdns.org
+sudo nginx -t && sudo systemctl reload nginx
+```
+
+Renewal is automatic (certbot systemd timer).
+
+> `deploy/nginx-realenglish.conf` is the final combined config (HTTP + HTTPS)
+> for reference — do not use it before the certificate exists, because the
+> `ssl_certificate` paths would not exist yet and `nginx -t` would fail.
 
 ## 7. Start with PM2
 
