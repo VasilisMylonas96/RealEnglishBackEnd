@@ -14,9 +14,8 @@ prisma/dev.db-journal
 *.sqlite
 *.sqlite3
 
-# Uploaded media (served from disk on the server; not part of the repo)
-uploads/*
-!uploads/.gitkeep
+# Uploaded media — tracked in the repo so a fresh clone has all media.
+# (On the server they are served from UPLOADS_DIR; keep the folder in sync.)
 
 # Logs
 *.log
