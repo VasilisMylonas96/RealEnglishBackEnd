@@ -1,0 +1,40 @@
+{
+  "name": "realenglish-backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Real English Academy - Express API Gateway (Node.js + Prisma + PostgreSQL)",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "prisma generate && node src/index.js",
+    "start": "node src/index.js",
+    "prisma:migrate": "prisma migrate deploy",
+    "prisma:generate": "prisma generate",
+    "questions:fill": "node prisma/fill-question-bank.js",
+    "seed": "node prisma/seed.js"
+  },
+  "prisma": {
+    "seed": "node prisma/seed.js"
+  },
+  "dependencies": {
+    "@napi-rs/canvas": "^1.1.1",
+    "@prisma/client": "^5.22.0",
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^2.0.1",
+    "nodemailer": "^10.3.1",
+    "pdf-lib": "^1.17.1",
+    "pdf-parse": "^2.4.5",
+    "pdfjs-dist": "^5.6.205",
+    "playwright": "^1.65.1",
+    "sharp": "^0.33.5",
+    "socket.io": "^4.8.4"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9",
+    "prisma": "^5.22.0"
+  }
+}
