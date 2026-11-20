@@ -147,3 +147,25 @@ npx prisma migrate deploy   # only if new migrations exist
 pm2 restart realenglish-backend
 ```
 
+## After a reboot / disk reset (Oracle ephemeral volume)
+
+Everything (code, `.env`, uploads) is in the GitHub repo, so recovery is one
+command:
+
+```bash
+bash ~/english-academy/RealEnglishBackEnd/deploy/redeploy.sh
+```
+
+If the whole disk was reset (repo gone too), clone first:
+
+```bash
+mkdir -p ~/english-academy && cd ~/english-academy
+git clone https://github.com/VasilisMylonas96/RealEnglishBackEnd.git
+bash RealEnglishBackEnd/deploy/redeploy.sh
+```
+
+> **To make it permanent:** create a **custom image** of the instance in the
+> Oracle Console (Compute → Instances → ⋮ → Create image) after a successful
+> deploy. Booting from that image restores everything, including the app.
+> Alternatively attach a **Block Volume** and mount it at the app path.
+
