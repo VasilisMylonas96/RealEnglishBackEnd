@@ -1,4 +1,4 @@
-# Deployment Guide — Real English Backend (Oracle Cloud)
+﻿# Deployment Guide — Real English Backend (Oracle Cloud)
 
 Target: `https://realenglishacademy.duckdns.org` → `http://127.0.0.1:4000`
 (DuckDNS A record → Oracle public IP `92.5.191.159`)
@@ -23,9 +23,9 @@ sudo apt install -y build-essential python3
 ## 2. Get the code
 
 ```bash
-cd /var/www
-sudo git clone https://github.com/VasilisMylonas96/RealEnglishBackEnd.git realenglish
-cd realenglish
+cd ~/english-academy
+git clone https://github.com/VasilisMylonas96/RealEnglishBackEnd.git
+cd RealEnglishBackEnd
 npm install --omit=dev
 ```
 
@@ -49,7 +49,7 @@ Required values (see `.env.example` for the full list):
 | `PUBLIC_BASE_URL` | `https://realenglishacademy.duckdns.org` |
 | `APP_BASE_URL` | `https://realenglishacademy.netlify.app` |
 | `FRONTEND_URL` | `https://realenglishacademy.netlify.app` |
-| `UPLOADS_DIR` | `/var/www/realenglish/uploads` |
+| `UPLOADS_DIR` | `/home/ubuntu/english-academy/RealEnglishBackEnd/uploads` |
 | `GEMINI_API_KEY` | your Gemini key |
 | `GOOGLE_PLACES_API_KEY` / `GOOGLE_PLACE_ID` | your Google Places values |
 | `MAIL_USER` / `MAIL_PASS` | Gmail + App Password |
@@ -60,8 +60,8 @@ Required values (see `.env.example` for the full list):
 ## 4. Uploads folder
 
 The media files are **already in the repo** (`uploads/`). Since the repo is
-cloned to `/var/www/realenglish`, the files land exactly at
-`/var/www/realenglish/uploads` — which matches `UPLOADS_DIR` in `.env`.
+cloned to `/home/ubuntu/english-academy/RealEnglishBackEnd`, the files land exactly at
+`/home/ubuntu/english-academy/RealEnglishBackEnd/uploads` — which matches `UPLOADS_DIR` in `.env`.
 Nothing to do.
 
 > **Oracle note:** the boot volume is ephemeral — on a reboot the instance
@@ -98,7 +98,7 @@ redirect. Renewal is automatic (systemd timer).
 ## 7. Start with PM2
 
 ```bash
-cd /var/www/realenglish
+cd /home/ubuntu/english-academy/RealEnglishBackEnd
 pm2 start ecosystem.config.js
 pm2 save
 pm2 startup        # run the printed command so PM2 survives reboots
@@ -129,9 +129,10 @@ no mixed content.
 ## Updating the app later
 
 ```bash
-cd /var/www/realenglish
+cd /home/ubuntu/english-academy/RealEnglishBackEnd
 git pull
 npm install --omit=dev
 npx prisma migrate deploy   # only if new migrations exist
 pm2 restart realenglish-backend
 ```
+
